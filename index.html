@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="Resources/Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="Resources/Content/bootstrap-theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="Resources/Content/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="Resources/Content/fileinput.min.css" />
+    <link rel="stylesheet" type="text/css" href="Resources/Content/fileinput-rtl.min.css" />
+    <title>LoadFiles</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="panel panel-primary ">
+                    <div class="panel-heading">
+                        Cargar Archivos
+                    </div>
+                   <form method="POST" enctype="multipart/form-data" id="formFile">
+                        <div class="panel-body">
+                            <input id="iptFile" type="file" multiple data-show-preview="false" data-show-upload="false" webkitdirectory>
+                        </div>
+                        <div class="panel-footer">
+                            <button id="btnSend" type="button" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="Resources/Scripts/jquery-3.6.0.min.js"></script>
+<script src="Resources/Scripts/bootstrap.min.js"></script>
+<script src="Resources/Scripts/datatables.min.js"></script>
+<script src="Resources/Scripts/fileInput/fileinput.min.js"></script>
+<script src="js/index.js"></script>
