@@ -1,22 +1,19 @@
-from flask import Flask,app,request,jsonify
+from flask import Flask,app,request,jsonify,redirect,url_for
 from flask_cors import CORS,cross_origin
 
 app = Flask(__name__)
 cors = CORS(app)
 
-@app.route('/upload', methods=['POST','GET'])
+@app.route('/upload', methods=['POST'])
 @cross_origin()
 def upload_file(): 
-    response=jsonify(message="test") 
-    print(response) 
-    #f = request.form.getList('')
-    f = request.form.get('prueba')
-    #for key, value in f.items():
-	#   print(key)
+    response=jsonify(message="exito") 
+
+    f = request.files.getlist('file')
+
     print(f)
-    #for file in f:
-        #print(f.filename)
-    #response.headers.add("Access-Control-Allow-Origin", "*")
-    return(response,200)
+    #return(response,200)
+    return redirect("http://127.0.0.1")
+
 
 

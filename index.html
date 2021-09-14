@@ -21,12 +21,12 @@
                     <div class="panel-heading">
                         Cargar Archivos
                     </div>
-                   <form method="POST" enctype="multipart/form-data" id="formFile">
+                   <form method="POST" enctype="multipart/form-data" id="formFile" action="http://127.0.0.1:5000/upload">
                         <div class="panel-body">
-                            <input id="iptFile" type="file" multiple data-show-preview="false" data-show-upload="false" webkitdirectory>
+                            <input id="file" name="file" type="file" multiple data-show-preview="false" data-show-upload="false" webkitdirectory>
                         </div>
                         <div class="panel-footer">
-                            <button id="btnSend" type="button" class="btn btn-primary">Enviar</button>
+                            <button id="btnSend" type="submit" class="btn btn-primary">Enviar</button>
                         </div>
                     </form>
                 </div>

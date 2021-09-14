@@ -7,16 +7,16 @@ $(document).ready(function () {
 
 $("#btnSend").on("click", function () {
    var fdFiles = new FormData();
-   /*var listFiles = $("#iptFile")[0].files;
+   var listFiles = $("#iptFile")[0].files;
    $.each(listFiles, function (index, value) {  
       fdFiles.append('archivo'+index, value);
    });
 
    for (var key of fdFiles.entries()) {
       console.log(key[0] + ', ' + key[1]);
-  }*/
+  }
 
-  fdFiles.append('prueba', '12345')
+  //fdFiles.append('prueba', '12345')
 
   $.ajax({
    url: 'http://127.0.0.1:5000/upload',
