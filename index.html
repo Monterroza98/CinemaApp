@@ -15,15 +15,17 @@
 
 <body>
     <div class="container">
-        <div class="row">
+        <div id="uploader" class="row">
             <div class="col-sm-6 col-sm-offset-3">
                 <div class="panel panel-primary ">
                     <div class="panel-heading">
                         Cargar Archivos
                     </div>
-                   <form method="POST" enctype="multipart/form-data" id="formFile" action="http://127.0.0.1:5000/upload">
+                    <form method="POST" enctype="multipart/form-data" id="formFile"
+                        action="http://127.0.0.1:5000/upload" onsubmit="$('#loading').show();$('#uploader').hide()">
                         <div class="panel-body">
-                            <input id="file" name="file" type="file" multiple data-show-preview="false" data-show-upload="false" webkitdirectory>
+                            <input id="file" name="file" type="file" multiple data-show-preview="false"
+                                data-show-upload="false" webkitdirectory>
                         </div>
                         <div class="panel-footer">
                             <button id="btnSend" type="submit" class="btn btn-primary">Enviar</button>
@@ -31,6 +33,9 @@
                     </form>
                 </div>
             </div>
+        </div>
+        <div id="loading" style="display: none;">
+            <img src="Resources/loadingGIF.gif"/>
         </div>
     </div>
 </body>
