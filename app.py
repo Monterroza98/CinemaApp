@@ -25,15 +25,17 @@ def processFiles(file):
     j = pd.read_excel(file.stream, skiprows=2, index_col=None,
                       usecols="B,E:G,H,J,L,N,P,R,T,V,X,Z,AA,AC,AE,AG,AI,AK,AM,AO,AQ,AS,AT")
     filename = file.filename.split("/")
+    filename = filename[len(filename)-1].split(".")
+    filename = filename[0]
     # CR2019-01-03.xls
-    country = filename[1][:2]
-    date = filename[1].split("-")
-    year = date[0][4:]
-    month = date[1]
-    uploadToDatabase(j, country, year, month)
+    #country = filename[1][:2]
+    #date = filename[1].split("-")
+    #year = date[0][4:]
+    #month = date[1]
+    #uploadToDatabase(j, country, year, month)
     return
 
 
-def uploadToDatabase(dataframe, country, *date):
-    
-    return
+#def uploadToDatabase(dataframe, country, *date):
+#    print(dataframe)
+#    return
