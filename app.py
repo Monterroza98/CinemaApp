@@ -1,16 +1,11 @@
-from typing import Counter
 from flask import Flask, app, request, jsonify, redirect, url_for
-from flask_cors import CORS, cross_origin
 import pandas as pd
-from werkzeug.datastructures import Headers
 import xlrd
 
 app = Flask(__name__)
-cors = CORS(app)
 
 
 @app.route('/upload', methods=['POST'])
-@cross_origin()
 def upload_file():
     response = jsonify(message="exito")
 
@@ -27,6 +22,11 @@ def processFiles(file):
     filename = file.filename.split("/")
     filename = filename[len(filename)-1].split(".")
     filename = filename[0]
+    fileToJSON = j.to_json(orient="records")
+    # ESTE METODO DE ABAJO ES PARA KATIRO!!!!!
+    aInsertar = {"_id": filename, "content": fileToJSON}
+    # ESTE SERIA EL METODO DE KATIRO
+    uploadToDatabase(filename, fileToJSON)
     # CR2019-01-03.xls
     #country = filename[1][:2]
     #date = filename[1].split("-")
@@ -35,7 +35,9 @@ def processFiles(file):
     #uploadToDatabase(j, country, year, month)
     return
 
+# EJEMPLO DE METODO DE KATIRO QUE RECIBE DOS PARAMETROS
 
-#def uploadToDatabase(dataframe, country, *date):
-#    print(dataframe)
-#    return
+
+def uploadToDatabase(filename, fileContent):
+    print(fileContent)
+    return
