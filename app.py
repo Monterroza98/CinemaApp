@@ -1,6 +1,7 @@
 from flask import Flask, app, request, jsonify, redirect, url_for
 import pandas as pd
 import xlrd
+from Controllers.CinemaController import * 
 
 app = Flask(__name__)
 
@@ -24,9 +25,9 @@ def processFiles(file):
     filename = filename[0]
     fileToJSON = j.to_json(orient="records")
     # ESTE METODO DE ABAJO ES PARA KATIRO!!!!!
-    aInsertar = {"_id": filename, "content": fileToJSON}
+#aInsertar = {"_id": filename, "content": fileToJSON}
     # ESTE SERIA EL METODO DE KATIRO
-    uploadToDatabase(filename, fileToJSON)
+    CinemaController.uploadToDatabase(filename, fileToJSON)
     # CR2019-01-03.xls
     #country = filename[1][:2]
     #date = filename[1].split("-")
@@ -38,6 +39,6 @@ def processFiles(file):
 # EJEMPLO DE METODO DE KATIRO QUE RECIBE DOS PARAMETROS
 
 
-def uploadToDatabase(filename, fileContent):
-    print(fileContent)
-    return
+#def uploadToDatabase(filename, fileContent):
+#    print(fileContent)
+#   return
