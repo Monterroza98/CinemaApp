@@ -51,20 +51,18 @@ def processFiles(file):
 # ----------------------------------------------Controllers------------------------------------------------------------
 
 # TOP INGRESO DE PERSONAS DURANTE EL FIN DE SEMANA POR PAIS Y EN UN RANGO ESPECIFICO. 1
-
-
 @app.route('/topWkndCountryAndRange', methods=['POST'])
 @cross_origin()
 def topWkndCountryAndRange():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     country = paramDic['country']
-    range = paramDic['range']
+    range = int(paramDic['range'])
     date = paramDic['date']
     date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    y = int(date[0])
+    m = int(date[1])
+    d = int(date[2])
 
     result = [
         {
@@ -121,20 +119,18 @@ def topWkndCountryAndRange():
     return response
 
 # TOP INGRESO DE PERSONAS DURANTE LA SEMANA POR PAIS Y EN UN RANGO ESPECIFICO. 2
-
-
 @app.route('/topWkCountryAndRange', methods=['POST'])
 @cross_origin()
 def topWkCountryAndRange():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     country = paramDic['country']
-    range = paramDic['range']
+    range = int(paramDic['range'])
     date = paramDic['date']
     date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    y = int(date[0])
+    m = int(date[1])
+    d = int(date[2])
     result = [
         {
             '$match': {
@@ -190,20 +186,18 @@ def topWkCountryAndRange():
     return response
 
 # TOP DE INGRESO DE DINERO DURANTE EL FIN DE SEMANA POR PAIS Y EN UN RANGO ESPECIFICO. 3
-
-
 @app.route('/topMoneyWkndCountryAndRange', methods=['POST'])
 @cross_origin()
 def topMoneyWkndCountryAndRange():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     country = paramDic['country']
-    range = paramDic['range']
+    range = int(paramDic['range'])
     date = paramDic['date']
     date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    y = int(date[0])
+    m = int(date[1])
+    d = int(date[2])
     result = [
         {
             '$match': {
@@ -259,20 +253,18 @@ def topMoneyWkndCountryAndRange():
     return response
 
 # TOP DE INGRESO DE DINERO DURANTE LA SEMANA POR PAIS Y EN UN RANGO ESPECIFICO. 4
-
-
 @app.route('/topMoneyWkCountryAndRange', methods=['POST'])
 @cross_origin()
 def topMoneyWkCountryAndRange():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     country = paramDic['country']
-    range = paramDic['range']
+    range = int(paramDic['range'])
     date = paramDic['date']
     date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    y = int(date[0])
+    m = int(date[1])
+    d = int(date[2])
     result = [
         {
             '$match': {
@@ -328,8 +320,6 @@ def topMoneyWkCountryAndRange():
     return response
 
 # TOP MAYOR INGRESO DE DINERO POR SEMANA, CADENA Y POR RANGO ESPECIFICO. 5
-
-
 @app.route('/tophigherMoneyWkCountryAndRangeAndChain', methods=['POST'])
 @cross_origin()
 def topHigherMoneyWkCountryAndRangeAndChain():
@@ -337,12 +327,12 @@ def topHigherMoneyWkCountryAndRangeAndChain():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     chain = paramDic['chain']
-    range = paramDic['range']
+    range = int(paramDic['range'])
     date = paramDic['date']
     date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    y = int(date[0])
+    m = int(date[1])
+    d = int(date[2])
     result = [
         {
             '$match': {
@@ -399,8 +389,6 @@ def topHigherMoneyWkCountryAndRangeAndChain():
     return response
 
 # TOP DE INGRESO DE DINERO DURANTE EL FIN DE SEMANA POR PAIS, SUCURSAL Y EN UN RANGO ESPECIFICO. 6
-
-
 @app.route('/topMoneyWkCountryAndSucursalAndRange', methods=['POST'])
 @cross_origin()
 def topMoneyWkCountryAndSucursalAndRange():
@@ -408,12 +396,12 @@ def topMoneyWkCountryAndSucursalAndRange():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     sucursal = paramDic['Sucursal']
-    range = paramDic['range']
+    range = int(paramDic['range'])
     date = paramDic['date']
     date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    y = int(date[0])
+    m = int(date[1])
+    d = int(date[2])
     result = [
         {
             '$match': {
@@ -470,8 +458,6 @@ def topMoneyWkCountryAndSucursalAndRange():
     return response
 
 # TOP INGRESO DE PERSONAS DURANTE LA SEMANA POR PAIS, POR CADENA Y EN UN RANGO ESPECIFICO. 7
-
-
 @app.route('/topWkCountryAndChainAndRange', methods=['POST'])
 @cross_origin()
 def topWkCountryAndChainAndRange():
@@ -479,12 +465,12 @@ def topWkCountryAndChainAndRange():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     chain = paramDic['chain']
-    range = paramDic['range']
+    range = int(paramDic['range'])
     date = paramDic['date']
     date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    y = int(date[0])
+    m = int(date[1])
+    d = int(date[2])
     result = [
         {
             '$match': {
@@ -541,8 +527,6 @@ def topWkCountryAndChainAndRange():
     return response
 
 # TOP INGRESO DE PERSONAS DURANTE EL FIN DE SEMANA POR PAIS Y EN UN RANGO ESPECIFICO.8
-
-
 @app.route('/topWkndCountryAndChainAndRange', methods=['POST'])
 @cross_origin()
 def topWkndCountryAndChainAndRange():
@@ -550,12 +534,12 @@ def topWkndCountryAndChainAndRange():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     chain = paramDic['chain']
-    range = paramDic['range']
+    range = int(paramDic['range'])
     date = paramDic['date']
     date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    y = int(date[0])
+    m = int(date[1])
+    d = int(date[2])
     result = [
         {
             '$match': {
@@ -612,8 +596,6 @@ def topWkndCountryAndChainAndRange():
     return response
 
 # TOP 10 DE PELICULAS POR CADENA, POR PAIS, POR RANGO 9 en desarrollo
-
-
 @app.route('/topMovieCountryAndChainAndRange', methods=['POST'])
 @cross_origin()
 def topMovieCountryAndChainAndRange():
@@ -621,12 +603,18 @@ def topMovieCountryAndChainAndRange():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     chain = paramDic['chain']
-    range = paramDic['range']
-    date = paramDic['date']
-    date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    range = int(paramDic['range'])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -649,11 +637,11 @@ def topMovieCountryAndChainAndRange():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }, {
                         'date': {
-                            '$lte': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
@@ -706,9 +694,7 @@ def topMovieCountryAndChainAndRange():
     response = js.dumps(response)
     return response
 
-# TOP 10 Sucursales con mas ingresos por cadena y pais en un rango de tiempo 10
-
-
+####### TOP 10 Sucursales con mas ingresos por cadena y pais en un rango de tiempo 10
 @app.route('/topSucursalsCountryAndChainAndRangeAndDate', methods=['POST'])
 @cross_origin()
 def topSucursalsCountryAndChainAndRangeAndDate():
@@ -716,12 +702,18 @@ def topSucursalsCountryAndChainAndRangeAndDate():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     chain = paramDic['chain']
-    range = paramDic['range']
-    date = paramDic['date']
-    date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    range = int(paramDic['range'])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -744,11 +736,11 @@ def topSucursalsCountryAndChainAndRangeAndDate():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }, {
                         'date': {
-                            '$lte': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
@@ -800,19 +792,23 @@ def topSucursalsCountryAndChainAndRangeAndDate():
     return response
 
 # Busqueda ganacia por pelicula por rango (para indicar fin de semana e ingresos de dinero solo se cambiar content.ingTotal por content.ingWeekend, ingreso por persona admWeekend e ingreso total de personas por semana admTotal ) 11
-
-
 @app.route('/searchProfitsMovieDate', methods=['POST'])
 @cross_origin()
 def searchProfitsMovieDate():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     movie = paramDic['movie']
-    date = paramDic['date']
-    date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$unwind': {
@@ -839,11 +835,11 @@ def searchProfitsMovieDate():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }, {
                         'date': {
-                            '$lt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$lt': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
@@ -866,8 +862,6 @@ def searchProfitsMovieDate():
     return response
 
 # Busqueda ganacia por pelicula por ranago y pais (para indicar fin de semana e ingresos de dinero solo se cambiar content.ingTotal por content.ingWeekend, ingreso por persona admWeekend e ingreso total de personas por semana admTotal ) 12
-
-
 @app.route('/searchProfitsMovieCountryAndDate', methods=['POST'])
 @cross_origin()
 def searchProfitsMovieCountryAndDate():
@@ -875,11 +869,17 @@ def searchProfitsMovieCountryAndDate():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     movie = paramDic['movie']
-    date = paramDic['date']
-    date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$unwind': {
@@ -912,11 +912,11 @@ def searchProfitsMovieCountryAndDate():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }, {
                         'date': {
-                            '$lte': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
@@ -939,8 +939,6 @@ def searchProfitsMovieCountryAndDate():
     return response
 
 # Busqueda ganacia por pelicula por ranago y pais y cadena(para indicar fin de semana e ingresos de dinero solo se cambiar content.ingTotal por content.ingWeekend, ingreso por persona admWeekend e ingreso total de personas por semana admTotal ) 13
-
-
 @app.route('/searchProfitsMovieCountryAndDateAndChain', methods=['POST'])
 @cross_origin()
 def searchProfitsMovieCountryAndDateAndChain():
@@ -949,11 +947,17 @@ def searchProfitsMovieCountryAndDateAndChain():
     country = paramDic['country']
     chain = paramDic['chain']
     movie = paramDic['movie']
-    date = paramDic['date']
-    date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$unwind': {
@@ -988,11 +992,11 @@ def searchProfitsMovieCountryAndDateAndChain():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }, {
                         'date': {
-                            '$lte': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
@@ -1015,8 +1019,6 @@ def searchProfitsMovieCountryAndDateAndChain():
     return response
 
 # Busqueda ganacia por pelicula por ranago y pais, cadena y sucursal (para indicar fin de semana e ingresos de dinero solo se cambiar content.ingTotal por content.ingWeekend, ingreso por persona admWeekend e ingreso total de personas por semana admTotal )14
-
-
 @app.route('/searchProfitsMovieCountryAndDateAndChainAndSucursal', methods=['POST'])
 @cross_origin()
 def searchProfitsMovieCountryAndDateAndChainAndSucursal():
@@ -1026,11 +1028,17 @@ def searchProfitsMovieCountryAndDateAndChainAndSucursal():
     chain = paramDic['chain']
     sucursal = paramDic['sucursal']
     movie = paramDic['movie']
-    date = paramDic['date']
-    date = date.split("-")
-    y = date[0]
-    m = date[1]
-    d = date[2]
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$unwind': {
@@ -1067,11 +1075,11 @@ def searchProfitsMovieCountryAndDateAndChainAndSucursal():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }, {
                         'date': {
-                            '$lte': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]

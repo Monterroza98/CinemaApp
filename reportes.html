@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="Resources/Content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="Resources/Content/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="Resources/Content/jquery-ui.min.css" />
+    <title>Reportes</title>
+</head>
+<body>
+    <form id="frmMain" name="frmMain" autocomplete="off">
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Filtros
+                </div>
+                <div class="panel-body">
+                    <div class="col-sm-5">
+                        <label>Reporte</label>
+                        <select class="form-control" id="list_rpt" name="list_rpt" onchange="ctrlFiltros(this.value)">
+                            <option value="" hidden>Seleccione</option>
+                            <option value="1">Ingreso de personas</option>
+                            <option value="2">Ingreso monetario</option>
+                            <option value="3">Top de películas</option>
+                            <option value="4">Información de película</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-primary btn-block" id="btnConsultar">Consultar</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-default btn-block" id="btnLimpiar">Limpiar</button>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-check" id="div_chkFecha">
+                            <input class="form-check-input" type="checkbox" value="" id="chkFecha">
+                            <label class="form-check-label" for="chkFecha">
+                              Usar todas las fechas
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" id="div_filtros">
+                        <hr>
+                        <div class="col-sm-2">
+                            <label>Fecha inicio</label>
+                             <input type="text" class="form-control" placeholder="Fecha inicio" id="from" name="from" style="cursor: pointer;" readonly>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Fecha final</label>
+                            <input type="text" class="form-control" placeholder="Fecha final" id="to" name="to" style="cursor: pointer;" readonly>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>País</label>
+                            <select class="form-control" id="list_paises" name="list_paises">
+                                <option value="" hidden>Seleccione</option>
+                                <option value="SV">SV</option>
+                                <option value="CR">CR</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Cadena</label>
+                            <select class="form-control" id="list_cadena" name="list_cadena">
+                                <option value="" hidden>Seleccione</option>
+                                <option value="Cinemark">Cinemark</option>
+                                <option value="Cinepolis">Cinepolis</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Sucursal</label>
+                            <select class="form-control" id="list_sucursal" name="list_sucursal">
+                                <option value="" hidden>Seleccione</option>
+                                <option value="CityMall Alajuela 8">CityMall Alajuela 8</option>
+                                <option value="Desamparados 6">Desamparados 6</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" id="div_pelicula">
+                        <br>
+                        <label>Película:</label>
+                        <input type="text" class="form-control" placeholder="Digite la película a consultar" id="pelicula" name="pelicula">
+                    </div>
+                </div>
+            </div>
+            <div id="resultado_rpt">
+                
+
+                
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<script src="Resources/Scripts/jquery-3.6.0.min.js"></script>
+<script src="Resources/Scripts/bootstrap.min.js"></script>
+<script src="Resources/Scripts/datatables.min.js"></script>
+<script src="Resources/Scripts/jquery-ui.min.js"></script>
+<script src="js/reportes.js"></script>
