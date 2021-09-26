@@ -611,6 +611,260 @@ def topWkndCountryAndChainAndRange():
     response = js.dumps(response)
     return response
 
+# TOP 10 DE PELICULAS POR CADENA, POR PAIS, POR RANGO 9 en desarrollo
+
+
+@app.route('/topMovieCountryAndChainAndRange', methods=['POST'])
+@cross_origin()
+def topMovieCountryAndChainAndRange():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    range = paramDic['range']
+    date = paramDic['date']
+    date = date.split("-")
+    y = date[0]
+    m = date[1]
+    d = date[2]
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        }, {
+            '$match': {
+                '$and': [
+                    {
+                        'date': {
+                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }
+                ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                'content.cadena': chain
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idSucursal': '$content.idSucursal',
+                    'idtitulo': '$content.idTitulo'
+                },
+                'ingresosTotalesSucursal': {
+                    '$sum': '$content.ingTotal'
+                },
+                'uniqueValuesSucursal': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$unwind': {
+                'path': '$uniqueValuesSucursal'
+            }
+        }, {
+            '$group': {
+                '_id': '$uniqueValuesSucursal.titulo',
+                'totalIngresos': {
+                    '$sum': '$uniqueValuesSucursal.ingTotal'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$uniqueValuesSucursal'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalIngresos': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+# TOP 10 Sucursales con mas ingresos por cadena y pais en un rango de tiempo 10
+
+
+@app.route('/topSucursalsCountryAndChainAndRangeAndDate', methods=['POST'])
+@cross_origin()
+def topSucursalsCountryAndChainAndRangeAndDate():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    range = paramDic['range']
+    date = paramDic['date']
+    date = date.split("-")
+    y = date[0]
+    m = date[1]
+    d = date[2]
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        }, {
+            '$match': {
+                '$and': [
+                    {
+                        'date': {
+                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }
+                ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                'content.cadena': chain
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idSucursal': '$content.idSucursal',
+                    'idtitulo': '$content.idTitulo'
+                },
+                'ingresosTotalesSucursal': {
+                    '$sum': '$content.ingTotal'
+                },
+                'uniqueValuesSucursal': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idSucursal': '$_id.idSucursal',
+                    'nombreSucursal': {
+                        '$last': '$uniqueValuesSucursal.sucursal'
+                    }
+                },
+                'ingresoTotalSucursal': {
+                    '$sum': '$ingresosTotalesSucursal'
+                }
+            }
+        }, {
+            '$sort': {
+                'ingresoTotalSucursal': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+# Busqueda ganacia por pelicula por rango (para indicar fin de semana e ingresos de dinero solo se cambiar content.ingTotal por content.ingWeekend, ingreso por persona admWeekend e ingreso total de personas por semana admTotal ) 11
+
+
+@app.route('/searchProfitsMovieDate', methods=['POST'])
+@cross_origin()
+def searchProfitsMovieDate():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    movie = paramDic['movie']
+    date = paramDic['date']
+    date = date.split("-")
+    y = date[0]
+    m = date[1]
+    d = date[2]
+    result = [
+        {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                'content.titulo': movie
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        }, {
+            '$match': {
+                '$and': [
+                    {
+                        'date': {
+                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }
+                ]
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idTitutlo': '$content.idTitulo',
+                    'titulo': '$content.titulo'
+                },
+                'total': {
+                    '$sum': '$content.ingTotal'
+                }
+            }
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
 # Busqueda ganacia por pelicula por ranago y pais (para indicar fin de semana e ingresos de dinero solo se cambiar content.ingTotal por content.ingWeekend, ingreso por persona admWeekend e ingreso total de personas por semana admTotal ) 12
 
 
