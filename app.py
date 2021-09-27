@@ -58,11 +58,17 @@ def topWkndCountryAndRange():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     range = int(paramDic['range'])
-    date = paramDic['date']
-    date = date.split("-")
-    y = int(date[0])
-    m = int(date[1])
-    d = int(date[2])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
 
     result = [
         {
@@ -86,10 +92,66 @@ def topWkndCountryAndRange():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.idTitulo',
+                'totalAdm': {
+                    '$sum': '$content.admWeekend'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalAdm': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/topWkndCountryAndRangeAll', methods=['POST'])
+@cross_origin()
+def topWkndCountryAndRangeAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    range = int(paramDic['range'])
+
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$unwind': {
@@ -126,11 +188,17 @@ def topWkCountryAndRange():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     range = int(paramDic['range'])
-    date = paramDic['date']
-    date = date.split("-")
-    y = int(date[0])
-    m = int(date[1])
-    d = int(date[2])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -153,10 +221,66 @@ def topWkCountryAndRange():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.idTitulo',
+                'totalAdm': {
+                    '$sum': '$content.admTotal'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalAdm': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/topWkCountryAndRangeAll', methods=['POST'])
+@cross_origin()
+def topWkCountryAndRangeAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    range = int(paramDic['range'])
+    
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$unwind': {
@@ -193,11 +317,18 @@ def topMoneyWkndCountryAndRange():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     range = int(paramDic['range'])
-    date = paramDic['date']
-    date = date.split("-")
-    y = int(date[0])
-    m = int(date[1])
-    d = int(date[2])
+
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -215,17 +346,73 @@ def topMoneyWkndCountryAndRange():
                     }
                 }
             }
-        }, {
+        },  {
             '$match': {
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
             }
         }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.idTitulo',
+                'totalIngresos': {
+                    '$sum': '$content.ingWeekend'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalIngresos': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/topMoneyWkndCountryAndRangeAll', methods=['POST'])
+@cross_origin()
+def topMoneyWkndCountryAndRangeAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    range = int(paramDic['range'])
+
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        },{
             '$unwind': {
                 'path': '$content'
             }
@@ -260,11 +447,17 @@ def topMoneyWkCountryAndRange():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     range = int(paramDic['range'])
-    date = paramDic['date']
-    date = date.split("-")
-    y = int(date[0])
-    m = int(date[1])
-    d = int(date[2])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -282,15 +475,71 @@ def topMoneyWkCountryAndRange():
                     }
                 }
             }
-        }, {
+        },  {
             '$match': {
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.idTitulo',
+                'totalIngresos': {
+                    '$sum': '$content.ingTotal'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalIngresos': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/topMoneyWkCountryAndRangeAll', methods=['POST'])
+@cross_origin()
+def topMoneyWkCountryAndRangeAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    range = int(paramDic['range'])
+
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$unwind': {
@@ -328,11 +577,17 @@ def topHigherMoneyWkCountryAndRangeAndChain():
     country = paramDic['country']
     chain = paramDic['chain']
     range = int(paramDic['range'])
-    date = paramDic['date']
-    date = date.split("-")
-    y = int(date[0])
-    m = int(date[1])
-    d = int(date[2])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -351,17 +606,75 @@ def topHigherMoneyWkCountryAndRangeAndChain():
                     }
                 }
             }
-        }, {
+        },  {
             '$match': {
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
             }
         }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.idTitulo',
+                'totalIngresos': {
+                    '$sum': '$content.ingTotal'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalIngresos': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/tophigherMoneyWkCountryAndRangeAndChainAll', methods=['POST'])
+@cross_origin()
+def topHigherMoneyWkCountryAndRangeAndChainAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    range = int(paramDic['range'])
+
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country),
+                'content.cadena': re.compile(chain)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        },{
             '$unwind': {
                 'path': '$content'
             }
@@ -397,11 +710,17 @@ def topMoneyWkCountryAndSucursalAndRange():
     country = paramDic['country']
     sucursal = paramDic['Sucursal']
     range = int(paramDic['range'])
-    date = paramDic['date']
-    date = date.split("-")
-    y = int(date[0])
-    m = int(date[1])
-    d = int(date[2])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -420,17 +739,75 @@ def topMoneyWkCountryAndSucursalAndRange():
                     }
                 }
             }
-        }, {
+        },  {
             '$match': {
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
             }
         }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.idTitulo',
+                'totalIngresos': {
+                    '$sum': '$content.ingWeekend'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalIngresos': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/topMoneyWkCountryAndSucursalAndRangeAll', methods=['POST'])
+@cross_origin()
+def topMoneyWkCountryAndSucursalAndRangAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    sucursal = paramDic['Sucursal']
+    range = int(paramDic['range'])
+
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country),
+                'content.cadena': re.compile(sucursal)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        },{
             '$unwind': {
                 'path': '$content'
             }
@@ -466,11 +843,17 @@ def topWkCountryAndChainAndRange():
     country = paramDic['country']
     chain = paramDic['chain']
     range = int(paramDic['range'])
-    date = paramDic['date']
-    date = date.split("-")
-    y = int(date[0])
-    m = int(date[1])
-    d = int(date[2])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -494,10 +877,68 @@ def topWkCountryAndChainAndRange():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.idTitulo',
+                'totalAdm': {
+                    '$sum': '$content.admTotal'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalAdm': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/topWkCountryAndChainAndRangeAll', methods=['POST'])
+@cross_origin()
+def topWkCountryAndChainAndRangeAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    range = int(paramDic['range'])
+    
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country),
+                'content.cadena': re.compile(chain)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$unwind': {
@@ -535,11 +976,17 @@ def topWkndCountryAndChainAndRange():
     country = paramDic['country']
     chain = paramDic['chain']
     range = int(paramDic['range'])
-    date = paramDic['date']
-    date = date.split("-")
-    y = int(date[0])
-    m = int(date[1])
-    d = int(date[2])
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
     result = [
         {
             '$match': {
@@ -563,10 +1010,68 @@ def topWkndCountryAndChainAndRange():
                 '$and': [
                     {
                         'date': {
-                            '$gt': datetime(y, m, d, 0, 0, 0, tzinfo=timezone.utc)
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.idTitulo',
+                'totalAdm': {
+                    '$sum': '$content.admWeekend'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalAdm': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/topWkndCountryAndChainAndRangeAll', methods=['POST'])
+@cross_origin()
+def topWkndCountryAndChainAndRangeAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    range = int(paramDic['range'])
+    
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country),
+                'content.cadena': re.compile(chain)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$unwind': {
@@ -645,6 +1150,80 @@ def topMovieCountryAndChainAndRange():
                         }
                     }
                 ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                'content.cadena': chain
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idSucursal': '$content.idSucursal',
+                    'idtitulo': '$content.idTitulo'
+                },
+                'ingresosTotalesSucursal': {
+                    '$sum': '$content.ingTotal'
+                },
+                'uniqueValuesSucursal': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$unwind': {
+                'path': '$uniqueValuesSucursal'
+            }
+        }, {
+            '$group': {
+                '_id': '$uniqueValuesSucursal.titulo',
+                'totalIngresos': {
+                    '$sum': '$uniqueValuesSucursal.ingTotal'
+                },
+                'uniqueValues': {
+                    '$addToSet': '$uniqueValuesSucursal'
+                }
+            }
+        }, {
+            '$sort': {
+                'totalIngresos': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/topMovieCountryAndChainAndRangeAll', methods=['POST'])
+@cross_origin()
+def topMovieCountryAndChainAndRangeAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    range = int(paramDic['range'])
+
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$unwind': {
@@ -791,6 +1370,78 @@ def topSucursalsCountryAndChainAndRangeAndDate():
     response = js.dumps(response)
     return response
 
+@app.route('/topSucursalsCountryAndChainAndRangeAndDateAll', methods=['POST'])
+@cross_origin()
+def topSucursalsCountryAndChainAndRangeAndDateAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    range = int(paramDic['range'])
+    
+    result = [
+        {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        },{
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                'content.cadena': chain
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idSucursal': '$content.idSucursal',
+                    'idtitulo': '$content.idTitulo'
+                },
+                'ingresosTotalesSucursal': {
+                    '$sum': '$content.ingTotal'
+                },
+                'uniqueValuesSucursal': {
+                    '$addToSet': '$content'
+                }
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idSucursal': '$_id.idSucursal',
+                    'nombreSucursal': {
+                        '$last': '$uniqueValuesSucursal.sucursal'
+                    }
+                },
+                'ingresoTotalSucursal': {
+                    '$sum': '$ingresosTotalesSucursal'
+                }
+            }
+        }, {
+            '$sort': {
+                'ingresoTotalSucursal': -1
+            }
+        }, {
+            '$limit': range
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
 # Busqueda ganacia por pelicula por rango (para indicar fin de semana e ingresos de dinero solo se cambiar content.ingTotal por content.ingWeekend, ingreso por persona admWeekend e ingreso total de personas por semana admTotal ) 11
 @app.route('/searchProfitsMovieDate', methods=['POST'])
 @cross_origin()
@@ -843,6 +1494,51 @@ def searchProfitsMovieDate():
                         }
                     }
                 ]
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idTitutlo': '$content.idTitulo',
+                    'titulo': '$content.titulo'
+                },
+                'total': {
+                    '$sum': '$content.ingTotal'
+                }
+            }
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/searchProfitsMovieDateAll', methods=['POST'])
+@cross_origin()
+def searchProfitsMovieDateAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    movie = paramDic['movie']
+    
+    result = [
+        {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                'content.titulo': movie
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$group': {
@@ -920,6 +1616,58 @@ def searchProfitsMovieCountryAndDate():
                         }
                     }
                 ]
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idTitutlo': '$content.idTitulo',
+                    'titulo': '$content.titulo'
+                },
+                'total': {
+                    '$sum': '$content.ingTotal'
+                }
+            }
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/searchProfitsMovieCountryAndDateAll', methods=['POST'])
+@cross_origin()
+def searchProfitsMovieCountryAndDateAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    movie = paramDic['movie']
+    
+    result = [
+        {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                '$and': [
+                    {
+                        'content.titulo': movie
+                    }, {
+                        '_id': re.compile(country)
+                    }
+                ]
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$group': {
@@ -1018,6 +1766,61 @@ def searchProfitsMovieCountryAndDateAndChain():
     response = js.dumps(response)
     return response
 
+@app.route('/searchProfitsMovieCountryAndDateAndChainAll', methods=['POST'])
+@cross_origin()
+def searchProfitsMovieCountryAndDateAndChainAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    movie = paramDic['movie']
+    
+    result = [
+        {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                '$and': [
+                    {
+                        'content.titulo': movie
+                    }, {
+                        '_id': re.compile(country)
+                    }, {
+                        'content.cadena': chain
+                    }
+                ]
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idTitutlo': '$content.idTitulo',
+                    'titulo': '$content.titulo'
+                },
+                'total': {
+                    '$sum': '$content.ingTotal'
+                }
+            }
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
 # Busqueda ganacia por pelicula por ranago y pais, cadena y sucursal (para indicar fin de semana e ingresos de dinero solo se cambiar content.ingTotal por content.ingWeekend, ingreso por persona admWeekend e ingreso total de personas por semana admTotal )14
 @app.route('/searchProfitsMovieCountryAndDateAndChainAndSucursal', methods=['POST'])
 @cross_origin()
@@ -1083,6 +1886,64 @@ def searchProfitsMovieCountryAndDateAndChainAndSucursal():
                         }
                     }
                 ]
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'idTitutlo': '$content.idTitulo',
+                    'titulo': '$content.titulo'
+                },
+                'total': {
+                    '$sum': '$content.ingTotal'
+                }
+            }
+        }
+    ]
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+@app.route('/searchProfitsMovieCountryAndDateAndChainAndSucursalAll', methods=['POST'])
+@cross_origin()
+def searchProfitsMovieCountryAndDateAndChainAndSucursalAll():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
+    chain = paramDic['chain']
+    sucursal = paramDic['sucursal']
+    movie = paramDic['movie']
+    
+    result = [
+        {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$match': {
+                '$and': [
+                    {
+                        'content.titulo': movie
+                    }, {
+                        '_id': re.compile(country)
+                    }, {
+                        'content.cadena': chain
+                    }, {
+                        'content.sucursal': re.compile(sucursal)
+                    }
+                ]
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
             }
         }, {
             '$group': {

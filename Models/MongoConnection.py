@@ -1,7 +1,8 @@
 import pymongo
+import ssl
 
 #Crear conexion a Mongodb
-client = pymongo.MongoClient("mongodb+srv://doratt:Ludhe97@sandbox.sbzkp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://doratt:Ludhe97@sandbox.sbzkp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", ssl_cert_reqs=ssl.CERT_NONE)
 mongoDb = client['cinemadataset']['attendancedata']
 
 class MongoConnection:
