@@ -107,17 +107,14 @@ def topWkndCountryAndRange():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalAdm': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.admWeekend'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalAdm': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -159,17 +156,14 @@ def topWkndCountryAndRangeAll():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalAdm': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.admWeekend'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalAdm': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -236,17 +230,14 @@ def topWkCountryAndRange():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalAdm': {
+                '_id': {'Pelicula':'$content.titulo'},
+                'Total': {
                     '$sum': '$content.admTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalAdm': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -288,17 +279,14 @@ def topWkCountryAndRangeAll():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalAdm': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.admTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalAdm': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -366,17 +354,14 @@ def topMoneyWkndCountryAndRange():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.ingWeekend'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -418,17 +403,14 @@ def topMoneyWkndCountryAndRangeAll():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.ingWeekend'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -495,17 +477,14 @@ def topMoneyWkCountryAndRange():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.ingTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -547,17 +526,14 @@ def topMoneyWkCountryAndRangeAll():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.ingTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -626,17 +602,14 @@ def topHigherMoneyWkCountryAndRangeAndChain():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.ingTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -680,17 +653,14 @@ def topHigherMoneyWkCountryAndRangeAndChainAll():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.ingTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -759,17 +729,14 @@ def topMoneyWkCountryAndSucursalAndRange():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.ingWeekend'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -813,17 +780,14 @@ def topMoneyWkCountryAndSucursalAndRangAll():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.ingWeekend'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -892,17 +856,14 @@ def topWkCountryAndChainAndRange():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalAdm': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.admTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalAdm': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -946,17 +907,14 @@ def topWkCountryAndChainAndRangeAll():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalAdm': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.admTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalAdm': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -1025,17 +983,14 @@ def topWkndCountryAndChainAndRange():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalAdm': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.admWeekend'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$content'
                 }
             }
         }, {
             '$sort': {
-                'totalAdm': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -1079,8 +1034,8 @@ def topWkndCountryAndChainAndRangeAll():
             }
         }, {
             '$group': {
-                '_id': '$content.idTitulo',
-                'totalAdm': {
+                '_id': {'Pelicula': '$content.titulo'},
+                'Total': {
                     '$sum': '$content.admWeekend'
                 },
                 'uniqueValues': {
@@ -1089,7 +1044,7 @@ def topWkndCountryAndChainAndRangeAll():
             }
         }, {
             '$sort': {
-                'totalAdm': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -1178,17 +1133,14 @@ def topMovieCountryAndChainAndRange():
             }
         }, {
             '$group': {
-                '_id': '$uniqueValuesSucursal.titulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$uniqueValuesSucursal.titulo'},
+                'Total': {
                     '$sum': '$uniqueValuesSucursal.ingTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$uniqueValuesSucursal'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -1252,17 +1204,14 @@ def topMovieCountryAndChainAndRangeAll():
             }
         }, {
             '$group': {
-                '_id': '$uniqueValuesSucursal.titulo',
-                'totalIngresos': {
+                '_id': {'Pelicula': '$uniqueValuesSucursal.titulo'},
+                'Total': {
                     '$sum': '$uniqueValuesSucursal.ingTotal'
-                },
-                'uniqueValues': {
-                    '$addToSet': '$uniqueValuesSucursal'
                 }
             }
         }, {
             '$sort': {
-                'totalIngresos': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -1348,18 +1297,18 @@ def topSucursalsCountryAndChainAndRangeAndDate():
         }, {
             '$group': {
                 '_id': {
-                    'idSucursal': '$_id.idSucursal',
-                    'nombreSucursal': {
+                    'ID Sucursal': '$_id.idSucursal',
+                    'Sucursal': {
                         '$last': '$uniqueValuesSucursal.sucursal'
                     }
                 },
-                'ingresoTotalSucursal': {
+                'Total': {
                     '$sum': '$ingresosTotalesSucursal'
                 }
             }
         }, {
             '$sort': {
-                'ingresoTotalSucursal': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -1420,18 +1369,18 @@ def topSucursalsCountryAndChainAndRangeAndDateAll():
         }, {
             '$group': {
                 '_id': {
-                    'idSucursal': '$_id.idSucursal',
-                    'nombreSucursal': {
+                    'ID Sucursal': '$_id.idSucursal',
+                    'Sucursal': {
                         '$last': '$uniqueValuesSucursal.sucursal'
                     }
                 },
-                'ingresoTotalSucursal': {
+                'Total': {
                     '$sum': '$ingresosTotalesSucursal'
                 }
             }
         }, {
             '$sort': {
-                'ingresoTotalSucursal': -1
+                'Total': -1
             }
         }, {
             '$limit': range
@@ -1498,10 +1447,10 @@ def searchProfitsMovieDate():
         }, {
             '$group': {
                 '_id': {
-                    'idTitutlo': '$content.idTitulo',
-                    'titulo': '$content.titulo'
+                    'ID Pelicula': '$content.idTitulo',
+                    'Pelicula': '$content.titulo'
                 },
-                'total': {
+                'Total': {
                     '$sum': '$content.ingTotal'
                 }
             }
@@ -1543,10 +1492,10 @@ def searchProfitsMovieDateAll():
         }, {
             '$group': {
                 '_id': {
-                    'idTitutlo': '$content.idTitulo',
-                    'titulo': '$content.titulo'
+                    'ID Pelicula': '$content.idTitulo',
+                    'Pelicula': '$content.titulo'
                 },
-                'total': {
+                'Total': {
                     '$sum': '$content.ingTotal'
                 }
             }
@@ -1620,10 +1569,10 @@ def searchProfitsMovieCountryAndDate():
         }, {
             '$group': {
                 '_id': {
-                    'idTitutlo': '$content.idTitulo',
-                    'titulo': '$content.titulo'
+                    'ID Pelicula': '$content.idTitulo',
+                    'Pelicula': '$content.titulo'
                 },
-                'total': {
+                'Total': {
                     '$sum': '$content.ingTotal'
                 }
             }
@@ -1672,10 +1621,10 @@ def searchProfitsMovieCountryAndDateAll():
         }, {
             '$group': {
                 '_id': {
-                    'idTitutlo': '$content.idTitulo',
-                    'titulo': '$content.titulo'
+                    'ID Pelicula': '$content.idTitulo',
+                    'Pelicula': '$content.titulo'
                 },
-                'total': {
+                'Total': {
                     '$sum': '$content.ingTotal'
                 }
             }
@@ -1752,10 +1701,10 @@ def searchProfitsMovieCountryAndDateAndChain():
         }, {
             '$group': {
                 '_id': {
-                    'idTitutlo': '$content.idTitulo',
-                    'titulo': '$content.titulo'
+                    'ID Pelicula': '$content.idTitulo',
+                    'Pelicula': '$content.titulo'
                 },
-                'total': {
+                'Total': {
                     '$sum': '$content.ingTotal'
                 }
             }
@@ -1807,10 +1756,10 @@ def searchProfitsMovieCountryAndDateAndChainAll():
         }, {
             '$group': {
                 '_id': {
-                    'idTitutlo': '$content.idTitulo',
-                    'titulo': '$content.titulo'
+                    'ID Pelicula': '$content.idTitulo',
+                    'Pelicula': '$content.titulo'
                 },
-                'total': {
+                'Total': {
                     '$sum': '$content.ingTotal'
                 }
             }
@@ -1890,10 +1839,10 @@ def searchProfitsMovieCountryAndDateAndChainAndSucursal():
         }, {
             '$group': {
                 '_id': {
-                    'idTitutlo': '$content.idTitulo',
-                    'titulo': '$content.titulo'
+                    'ID Pelicula': '$content.idTitulo',
+                    'Pelicula': '$content.titulo'
                 },
-                'total': {
+                'Total': {
                     '$sum': '$content.ingTotal'
                 }
             }
@@ -1948,10 +1897,10 @@ def searchProfitsMovieCountryAndDateAndChainAndSucursalAll():
         }, {
             '$group': {
                 '_id': {
-                    'idTitutlo': '$content.idTitulo',
-                    'titulo': '$content.titulo'
+                    'ID Pelicula': '$content.idTitulo',
+                    'Pelicula': '$content.titulo'
                 },
-                'total': {
+                'Total': {
                     '$sum': '$content.ingTotal'
                 }
             }
