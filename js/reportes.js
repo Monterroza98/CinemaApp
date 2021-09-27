@@ -43,6 +43,7 @@ $('#btnLimpiar').click(function () {
 
 });
 
+//AQUI SE CONSULTA
 $('#btnConsultar').click(function () {
 /* */
 
@@ -72,7 +73,12 @@ $('#btnConsultar').click(function () {
   
   switch (idRpt) {
     case "1": //INGRESO DE PERSONAS
-
+      if(sinFecha){
+        //una query
+      }else{
+        query = "topWkndCountryAndRange";
+        params = '{"country": "'+pais+'", "range": "10", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
+      }
       break;
 
     case "2": //INGRESO MONETARIO
@@ -110,7 +116,7 @@ $('#btnConsultar').click(function () {
       error: function (jqXHR, textStatus, errorThrown) { alert("Error") },
       success: function (data) {
         createTable(data);
-        console.log(data)
+        //console.log(data)
           
       }
   });
@@ -135,23 +141,44 @@ function ctrlFiltros(idRpt) {
 
 function createTable(data) {
 
+  columns = [];
+  rows = [];
+  Object.keys(data[0]).forEach(function(key) {
+    columns.unshift(key);
+    rows.unshift(key);
+  });
+  rows.pop();
   
-  Object.keys(data).forEach(function(key) {
-    var value = data[key];
-    console.log(Object.keys(value));
+  Object.keys(data[0]['_id']).forEach(function(key) {
+    columns.unshift(key);
+    rows.unshift(key);
   });
 
-  $("#resultado_rpt").append('<table class="table table-bordered" id="table_rpt"></table>');
+  columns.pop();
+
+  var thead = '<thead><tr>';
+  $.each(columns, function(i, item) {
+    thead += '<th>'+item+'</th>';
+  });
+  thead += '</tr></thead>';
+
+
+  $("#resultado_rpt").append('<table class="table table-bordered" id="table_rpt">'+thead+'<tbody></tbody></table>');
   
   $.each(data, function(i, item) {
-    var $tr = $('<tr>').append(
-      $('<td>').text(item.ingresoTotalSucursal),
-      $('<td>').text(item._id.idSucursal),
-      $('<td>').text(item._id.nombreSucursal)
-    ); 
-    $("#table_rpt").append($tr)
+
+    var tds = '';
+    $.each(rows, function(i, prueba) {
+        if ((i +1) == rows.length) {
+          var content = item[prueba];
+        }else{
+          var content = item['_id'][prueba];
+        }
+      tds += '<td>'+(content)+'</td>';
+    });
+    var $tr = $('<tr>').append(tds); 
+    $("#table_rpt tbody").append($tr)
   });
-  
- //se debería iniciar datatables cuando ya esté lista la tabla
+  $("#table_rpt").dataTable({});
 }
 
