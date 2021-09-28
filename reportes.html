@@ -18,23 +18,28 @@
                     Filtros
                 </div>
                 <div class="panel-body">
-                    <div class="col-sm-5">
+                    <div class="col-sm-3">
                         <label>Reporte</label>
-                        <select class="form-control" id="list_rpt" name="list_rpt" onchange="ctrlFiltros(this.value)">
-                            <option value="" hidden>Seleccione</option>
-                            <option value="1">Ingreso de personas</option>
-                            <option value="2">Ingreso monetario</option>
-                            <option value="3">Top de películas</option>
-                            <option value="4">Información de película</option>
+                        <select class="form-control" id="list_rpt" name="list_rpt" onchange="ctrlData(this.value)">
+                            <option value="0" hidden>Seleccione</option>
+                            <option value="TopPeople">Películas por ingreso de personas</option>
+                            <option value="TopMoney">Películas por ingreso monetario</option>
+                            <option value="TopMovie">Top películas</option>
+                            <option value="TopSucursal">Top sucursales</option>
                         </select>
                     </div>
                     <div class="col-sm-2">
-                        <button type="button" class="btn btn-primary btn-block" id="btnConsultar">Consultar</button>
+                        <label>Datos</label>
+                        <select class="form-control" id="list_data" name="list_data" onchange="ctrlFiltros(this.value)">
+                            <option value="0" hidden>Seleccione</option>
+                        </select>
                     </div>
-                    <div class="col-sm-2">
-                        <button type="button" class="btn btn-default btn-block" id="btnLimpiar">Limpiar</button>
+                    <div class="col-sm-2" id="div_rango">
+                        <label># Registros</label>
+                        <input type="text" class="form-control" placeholder="10" id="rango" name="rango">
                     </div>
                     <div class="col-sm-3">
+                        <br>
                         <div class="form-check" id="div_chkFecha">
                             <input class="form-check-input" type="checkbox" value="" id="chkFecha">
                             <label class="form-check-label" for="chkFecha">
@@ -42,17 +47,25 @@
                             </label>
                         </div>
                     </div>
+                    <div class="col-sm-1">
+                        <br>
+                        <button type="button" class="btn btn-primary" id="btnConsultar" onclick="consultarReporte()">Consultar</button>
+                    </div>
+                    <div class="col-sm-1">
+                        <br>
+                        <button type="button" class="btn btn-default" id="btnLimpiar">Limpiar</button>
+                    </div>
                     <div class="col-sm-12" id="div_filtros">
                         <hr>
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <label>Fecha inicio</label>
-                             <input type="text" class="form-control" placeholder="Fecha inicio" id="from" name="from" style="cursor: pointer;" readonly>
+                            <input type="text" class="form-control" placeholder="Fecha inicio" id="from" name="from" style="cursor: pointer;" readonly>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <label>Fecha final</label>
                             <input type="text" class="form-control" placeholder="Fecha final" id="to" name="to" style="cursor: pointer;" readonly>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <label>País</label>
                             <select class="form-control" id="list_paises" name="list_paises">
                                 <option value="" hidden>Seleccione</option>
@@ -68,19 +81,6 @@
                                 <option value="Cinepolis">Cinepolis</option>
                             </select>
                         </div>
-                        <div class="col-sm-3">
-                            <label>Sucursal</label>
-                            <select class="form-control" id="list_sucursal" name="list_sucursal">
-                                <option value="" hidden>Seleccione</option>
-                                <option value="CityMall Alajuela 8">CityMall Alajuela 8</option>
-                                <option value="Desamparados 6">Desamparados 6</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-12" id="div_pelicula">
-                        <br>
-                        <label>Película:</label>
-                        <input type="text" class="form-control" placeholder="Digite la película a consultar" id="pelicula" name="pelicula">
                     </div>
                 </div>
             </div>

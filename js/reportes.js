@@ -1,8 +1,7 @@
 $(document).ready(function () {
   $( "#div_filtros" ).hide(); 
   $( "#div_chkFecha" ).hide();  
-  $( "#div_pelicula" ).hide();  
-  
+  $( "#div_rango" ).hide();  
 });
 
 $( function() {
@@ -35,77 +34,139 @@ $( function() {
 } );
 
 $('#btnLimpiar').click(function () {
-
   $('#frmMain')[0].reset();
   $( "#div_filtros" ).hide(); 
-  $( "#resultado_rpt" ).empty(); 
-  $( "#div_pelicula" ).hide(); 
-
+  $( "#resultado_rpt" ).empty();
+  $( "#div_rango" ).hide();
+  $("#list_data").html('<option value="0" hidden>Seleccione</option>')
 });
 
-//AQUI SE CONSULTA
-$('#btnConsultar').click(function () {
-/* */
+function ctrlFiltros(data) {
+  if(data != "0"){
+    $( "#div_filtros" ).show(); 
+    $( "#div_chkFecha" ).show();
+    $( "#div_rango" ).show();
+  }else{
+    $( "#div_filtros" ).hide(); 
+    $( "#div_chkFecha" ).hide();
+    $( "#div_rango" ).hide();
+  }
+ 
+}
 
-  $( "#resultado_rpt" ).empty();  
-  var idRpt = $("#list_rpt").val();
+function ctrlData(idRpt) {
+  var options = '';
+  $("#list_data").html('<option value="0" hidden>Seleccione</option>')
+
+  switch (idRpt) {
+    case "TopPeople":
+      options += '<option value="Week">Week</option>';
+      options += '<option value="Weekend">Weekend</option>';
+      break;
+    case "TopMoney":
+      options += '<option value="Week">Week</option>';
+      options += '<option value="Weekend">Weekend</option>';
+      break;
+    case "TopMovie":
+      options += '<option value="General">General</option>';
+      break;
+    case "TopSucursal":
+      options += '<option value="General">General</option>';
+      break;
+    default:
+      break;
+  }
+  $("#list_data").append(options)
+}
+
+//ESTE ES EL METODO PARA CONSULTAR
+function consultarReporte() {
+  $( "#resultado_rpt" ).empty(); 
   var query = "";
   var params = "";
 
-  if(!idRpt){
-    alert("Seleccione un reporte a consultar");
+  var reporte = $("#list_rpt").val();
+  var data    = $("#list_data").val();
+
+  if(reporte == "0" || data == "0"){
+    alert("Seleccione un reporte y data a consultar");
   }
 
-  var inicio   = $("#from").val();
-  var final    = $("#to").val();
-  var pais     = $("#list_paises").val();
-  var cadena   = $("#list_cadena").val();
-  var sucursal = $("#list_sucursal").val();
-  var pelicula = $("#pelicula").val();
+  var inicio = $("#from").val();
+  var final  = $("#to").val();
+  var pais   = $("#list_paises").val();
+  var cadena = $("#list_cadena").val();
+  var rango  = $("#rango").val();
 
+  if(!rango){rango = 10;}
   if ($('#chkFecha').prop('checked')) {
     var sinFecha = true;
   }else{
     if (!inicio || !final) {
-      alert("Seleccione el rango de fechas a consultar");
+      alert("Seleccione el rango de fechas a consultar o elija el checkbox");
     }
   }
-  
-  switch (idRpt) {
-    case "1": //INGRESO DE PERSONAS
-      if(sinFecha){
-        //una query
-      }else{
-        query = "topWkndCountryAndRange";
-        params = '{"country": "'+pais+'", "range": "10", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
-      }
-      break;
 
-    case "2": //INGRESO MONETARIO
+  var consulta = reporte + data;
 
-      if(cadena && pais){
-        if(sinFecha){
-          //una query
+  switch (consulta) {
+    case "TopPeopleWeek":
+
+      if(pais){
+        if(cadena){
+          (sinFecha ? ''/*CountryChainAll*/:''/*CountryChainFecha*/)
         }else{
-          query = "topSucursalsCountryAndChainAndRangeAndDate";
-          params = '{"country": "'+pais+'", "range": "10", "dateIni": "'+inicio+'",  "dateFin": "'+final+'", "chain": "'+cadena+'"}';
+          (sinFecha ? ''/*CountryAll*/:''/*CountryFecha*/)
         }
+      }else{
+        (sinFecha ? ''/*RegionAll*/:''/*RegionFecha*/)
       }
       
       break;
-
-    case "3": //TOP DE PELICULAS
+    case "TopPeopleWeekend":
+      if(pais){
+        if(cadena){
+          (sinFecha ? ''/*CountryChainAll*/:''/*CountryChainFecha*/)
+        }else{
+          (sinFecha ? ''/*CountryAll*/:''/*CountryFecha*/)
+        }
+      }else{
+        (sinFecha ? ''/*RegionAll*/:''/*RegionFecha*/)
+      }
+      break;
+    case "TopMoneyWeek":
+      if(pais){
+        if(cadena){
+          (sinFecha ? ''/*CountryChainAll*/:''/*CountryChainFecha*/)
+        }else{
+          (sinFecha ? ''/*CountryAll*/:''/*CountryFecha*/)
+        }
+      }else{
+        (sinFecha ? ''/*RegionAll*/:''/*RegionFecha*/)
+      }
+      break;
+    case "TopMoneyWeekend":
+      if(pais){
+        if(cadena){
+          (sinFecha ? ''/*CountryChainAll*/:''/*CountryChainFecha*/)
+        }else{
+          (sinFecha ? ''/*CountryAll*/:''/*CountryFecha*/)
+        }
+      }else{
+        (sinFecha ? ''/*RegionAll*/:''/*RegionFecha*/)
+      }
+      break;
+    case "TopMovieGeneral":
+      
+      break;
+    case "TopSucursalGeneral":
       
       break;
 
-    case "4": //INFORMACIÓN DE PELÍCULAS
-      
-      break;
-  
-    default:
-      break;
+    default:break;
   }
-  
+
+/*
   params = JSON.stringify(params);
   $.ajax({
      url: 'http://127.0.0.1:5000/'+query,
@@ -116,27 +177,9 @@ $('#btnConsultar').click(function () {
       error: function (jqXHR, textStatus, errorThrown) { alert("Error") },
       success: function (data) {
         createTable(data);
-        //console.log(data)
-          
       }
-  });
-});
+  });*/
 
-function ctrlFiltros(idRpt) {
-  $( "#div_filtros" ).show(); 
-  $( "#div_chkFecha" ).show();
-  
-  if(idRpt == 3){
-    $( "#list_sucursal" ).prop( "disabled", true ); 
-  }else{
-    $( "#list_sucursal" ).prop( "disabled", false ); 
-  }
-
-  if(idRpt == 4){
-    $( "#div_pelicula" ).show(); 
-  }else{
-    $( "#div_pelicula" ).hide(); 
-  }
 }
 
 function createTable(data) {
