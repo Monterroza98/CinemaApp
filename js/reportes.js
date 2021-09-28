@@ -179,6 +179,12 @@ function createTable(data) {
     var $tr = $('<tr>').append(tds); 
     $("#table_rpt tbody").append($tr)
   });
-  $("#table_rpt").dataTable({});
+  
+  $("#table_rpt").dataTable({
+    dom: 'Bfrtip',
+    buttons: [
+        'csv'
+    ]
+  });
 }
 
