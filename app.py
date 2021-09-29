@@ -142,6 +142,8 @@ def TopMoviesByCountryAndDate():
     return response
 
 # TopMoviesByCountry
+
+
 @app.route('/TopMoviesByCountry', methods=['POST'])
 @cross_origin()
 def TopMoviesByCountry():
@@ -206,6 +208,8 @@ def TopMoviesByCountry():
     return response
 
 # TopMovies
+
+
 @app.route('/TopMovies', methods=['POST'])
 @cross_origin()
 def TopMovies():
@@ -264,6 +268,8 @@ def TopMovies():
     return response
 
 # TopMoviesByDate
+
+
 @app.route('/TopMoviesByDate', methods=['POST'])
 @cross_origin()
 def TopMoviesByDate():
@@ -346,9 +352,11 @@ def TopMoviesByDate():
     response = js.dumps(response)
     return response
 
-#-----------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 
 # MovieByDate
+
+
 @app.route('/MovieByDate', methods=['POST'])
 @cross_origin()
 def MovieByDate():
@@ -429,6 +437,8 @@ def MovieByDate():
     return response
 
 # MoviesByDateAndCountry
+
+
 @app.route('/MoviesByDateAndCountry', methods=['POST'])
 @cross_origin()
 def MoviesByDateAndCountry():
@@ -608,6 +618,8 @@ def MovieByCountryAndCircuit():
     return response
 
 # MovieByCountryCircuitAndTheater
+
+
 @app.route('/MovieByCountryCircuitAndTheater', methods=['POST'])
 @cross_origin()
 def MovieByCountryCircuitAndTheater():
@@ -702,9 +714,11 @@ def MovieByCountryCircuitAndTheater():
     response = js.dumps(response)
     return response
 
-#----------------------------------------------------------
+# ----------------------------------------------------------
 
 # GetMovies
+
+
 @app.route('/GetMovies', methods=['POST'])
 @cross_origin()
 def GetMovies():
@@ -726,11 +740,20 @@ def GetMovies():
     return response
 
 # GetCircuits
+
+
 @app.route('/GetCircuits', methods=['POST'])
 @cross_origin()
 def GetCircuits():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    country = paramDic['country']
     result = [
         {
+            '$match': {
+                '_id': re.compile(country)
+            }
+        }, {
             '$unwind': {
                 'path': '$content'
             }
@@ -747,6 +770,8 @@ def GetCircuits():
     return response
 
 # GetTheaters
+
+
 @app.route('/GetTheaters', methods=['POST'])
 @cross_origin()
 def GetTheaters():
@@ -767,9 +792,34 @@ def GetTheaters():
     response = js.dumps(response)
     return response
 
-#-------------------------------------------------------------------------
+# GetCountries
+
+
+@app.route('/GetCountries', methods=['POST'])
+@cross_origin()
+def GetCountries():
+    result = [
+        {
+            '$group': {
+                '_id': '$pais'
+            }
+        }, {
+            '$sort': {
+                '_id': 1
+            }
+        }
+    ]
+
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+# -------------------------------------------------------------------------
 
 # TopCountries
+
+
 @app.route('/TopCountries', methods=['POST'])
 @cross_origin()
 def TopCountries():
@@ -806,6 +856,8 @@ def TopCountries():
     return response
 
 # TopCountriesByDate
+
+
 @app.route('/TopCountriesByDate', methods=['POST'])
 @cross_origin()
 def TopCountriesByDate():
@@ -881,16 +933,18 @@ def TopCountriesByDate():
     response = js.dumps(response)
     return response
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # CircuitByCountry
+
+
 @app.route('/CircuitByCountry', methods=['POST'])
 @cross_origin()
 def CircuitByCountry():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     circuit = paramDic['circuit']
-   
+
     dateIni = paramDic['dateIni']
     dateIni = dateIni.split("-")
     yi = int(dateIni[0])

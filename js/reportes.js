@@ -5,6 +5,7 @@ $(document).ready(function () {
   $( "#div_rango" ).hide();
   $( "#div_cadena" ).hide();
   $( "#div_pais" ).hide();
+  
 });
 
 $( function() {
@@ -50,6 +51,9 @@ function ctrlFiltros(data) {
     $( "#div_chkFecha" ).show();
     $( "#div_chkSort" ).show(); 
     $( "#div_rango" ).show();
+    $( "#div_pais" ).show();
+    getCountry()
+    $( "#div_cadena" ).show();
   }else if(data == "2"){
     $( "#div_filtros" ).show(); 
     $( "#div_chkFecha" ).show();
@@ -155,6 +159,51 @@ function consultarReporte() {
         createTable(data);
       }
   });
+
+}
+
+function getCountry(){
+  $.ajax({
+    url: 'http://127.0.0.1:5000/GetCountries',
+    type: "POST",
+    contentType: 'application/json',
+    dataType: 'json',
+     error: function (jqXHR, textStatus, errorThrown) { alert("Error") },
+     success: function (data) {
+
+      $('#list_paises').empty()
+      Object.keys(data).forEach(function(key) {
+        //console.log(data[key]['_id']);
+        $('#list_paises').append('<option value="'+data[key]['_id']+'">'+data[key]['_id']+'</option>')
+      }); 
+
+     }
+ });
+
+}
+
+function getCircuit(){
+  var paisSelected = $('#list_paises option:selected').val()
+  var params = '{"country": "'+paisSelected+'"}';
+  params = JSON.stringify(params);
+  console.log(params)
+  /$.ajax({
+    url: 'http://127.0.0.1:5000/GetCircuits',
+    type: "POST",
+    data: params,
+    contentType: 'application/json',
+    dataType: 'json',
+     error: function (jqXHR, textStatus, errorThrown) { alert("Error") },
+     success: function (data) {
+
+      $('#list_cadena').empty()
+      Object.keys(data).forEach(function(key) {
+        //console.log(data[key]['_id']);
+        $('#list_cadena').append('<option value="'+data[key]['_id']+'">'+data[key]['_id']+'</option>')
+      }); 
+
+     }
+ });
 
 }
 
