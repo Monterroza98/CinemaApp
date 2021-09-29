@@ -1,7 +1,8 @@
 $(document).ready(function () {
   $( "#div_filtros" ).hide(); 
   $( "#div_chkFecha" ).hide();  
-  $( "#div_rango" ).hide();  
+  $( "#div_rango" ).hide();  //
+  $( "#div_cadena" ).hide();
 });
 
 $( function() {
@@ -42,7 +43,7 @@ $('#btnLimpiar').click(function () {
 });
 
 function ctrlFiltros(data) {
-  if(data != "0"){
+  if(data == "1" || data == "2"){
     $( "#div_filtros" ).show(); 
     $( "#div_chkFecha" ).show();
     $( "#div_rango" ).show();
@@ -50,33 +51,9 @@ function ctrlFiltros(data) {
     $( "#div_filtros" ).hide(); 
     $( "#div_chkFecha" ).hide();
     $( "#div_rango" ).hide();
+    $( "#div_cadena" ).hide();
   }
  
-}
-
-function ctrlData(idRpt) {
-  var options = '';
-  $("#list_data").html('<option value="0" hidden>Seleccione</option>')
-
-  switch (idRpt) {
-    case "TopPeople":
-      options += '<option value="Week">Week</option>';
-      options += '<option value="Weekend">Weekend</option>';
-      break;
-    case "TopMoney":
-      options += '<option value="Week">Week</option>';
-      options += '<option value="Weekend">Weekend</option>';
-      break;
-    case "TopMovie":
-      options += '<option value="General">General</option>';
-      break;
-    case "TopSucursal":
-      options += '<option value="General">General</option>';
-      break;
-    default:
-      break;
-  }
-  $("#list_data").append(options)
 }
 
 //ESTE ES EL METODO PARA CONSULTAR
@@ -86,9 +63,8 @@ function consultarReporte() {
   var params = "";
 
   var reporte = $("#list_rpt").val();
-  var data    = $("#list_data").val();
 
-  if(reporte == "0" || data == "0"){
+  if(reporte == "0"){
     alert("Seleccione un reporte y data a consultar");
   }
 
@@ -107,66 +83,65 @@ function consultarReporte() {
     }
   }
 
-  var consulta = reporte + data;
+  /* 
+  query = "topWkndCountryAndRange";
+  params = '{"country": "'+pais+'", "range": "10", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
 
-  switch (consulta) {
-    case "TopPeopleWeek":
+    if(pais){
+        if(cadena){
+          (sinFecha ? '':'')
+        }else{
+          (sinFecha ? '':'')
+        }
+      }else{
+        (sinFecha ? '':'')
+      }
+  */
+
+  switch (reporte) {
+    case "1": //TopMovie
 
       if(pais){
-        if(cadena){
-          (sinFecha ? ''/*CountryChainAll*/:''/*CountryChainFecha*/)
+        if(sinFecha){
+          query = "TopMoviesByCountry";
+          params = '{"country": "'+pais+'", "range": "'+rango+'"}';
         }else{
-          (sinFecha ? ''/*CountryAll*/:''/*CountryFecha*/)
+          query = "TopMoviesByCountryAndDate";
+          params = '{"country": "'+pais+'", "range": "'+rango+'", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
         }
       }else{
-        (sinFecha ? ''/*RegionAll*/:''/*RegionFecha*/)
+        if(sinFecha){
+          query = "TopMovies";
+          params = '{"range": "'+rango+'"}';
+        }else{
+          query = "TopMoviesByDate";
+          params = '{"range": "'+rango+'", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
+        }
       }
       
       break;
-    case "TopPeopleWeekend":
-      if(pais){
-        if(cadena){
-          (sinFecha ? ''/*CountryChainAll*/:''/*CountryChainFecha*/)
+
+    case "2": //TopCountry
+        if(sinFecha){
+          //TopCountrybyCountry
+          query = "";
+          params = '{"country": "'+pais+'", "range": "'+rango+'"}';
         }else{
-          (sinFecha ? ''/*CountryAll*/:''/*CountryFecha*/)
+          //TopCountrybyCountryAndDate
+          query = "";
+          params = '{"country": "'+pais+'", "range": "'+rango+'", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
         }
-      }else{
-        (sinFecha ? ''/*RegionAll*/:''/*RegionFecha*/)
-      }
-      break;
-    case "TopMoneyWeek":
-      if(pais){
-        if(cadena){
-          (sinFecha ? ''/*CountryChainAll*/:''/*CountryChainFecha*/)
-        }else{
-          (sinFecha ? ''/*CountryAll*/:''/*CountryFecha*/)
-        }
-      }else{
-        (sinFecha ? ''/*RegionAll*/:''/*RegionFecha*/)
-      }
-      break;
-    case "TopMoneyWeekend":
-      if(pais){
-        if(cadena){
-          (sinFecha ? ''/*CountryChainAll*/:''/*CountryChainFecha*/)
-        }else{
-          (sinFecha ? ''/*CountryAll*/:''/*CountryFecha*/)
-        }
-      }else{
-        (sinFecha ? ''/*RegionAll*/:''/*RegionFecha*/)
-      }
-      break;
-    case "TopMovieGeneral":
+        break;
+
+    case "3":
       
-      break;
-    case "TopSucursalGeneral":
-      
-      break;
+        break;
+
+
 
     default:break;
   }
 
-/*
   params = JSON.stringify(params);
   $.ajax({
      url: 'http://127.0.0.1:5000/'+query,
@@ -177,11 +152,66 @@ function consultarReporte() {
       error: function (jqXHR, textStatus, errorThrown) { alert("Error") },
       success: function (data) {
         createTable(data);
+        console.log(data)
       }
-  });*/
+  });
 
 }
 
+function createTable(data) {
+
+  col_id  = [];
+  col_total = [];
+
+  Object.keys(data[0]).forEach(function(key) { //los que no estan dentro de _id
+    col_total.unshift(key);
+
+  });
+  col_total.pop();//para quitar la col de "_id"
+  
+  Object.keys(data[0]['_id']).forEach(function(key) {
+    col_id.unshift(key);
+  });
+
+  var thead = '<thead><tr class="info">';
+  $.each(col_id, function(i, item) {
+    thead += '<th>'+item+'</th>';
+  });
+  $.each(col_total, function(i, item) {
+    thead += '<th>'+item+'</th>';
+  });
+  thead += '</tr></thead>';
+
+  $("#resultado_rpt").append('<table class="table table-bordered" id="table_rpt">'+thead+'<tbody></tbody></table>');
+  
+  $.each(data, function(i, item) {
+
+    var tds = '';
+
+    $.each(col_id, function(i, prueba) {
+      var content = item['_id'][prueba];
+      tds += '<td>'+(content)+'</td>';
+    });
+    $.each(col_total, function(i, prueba) {
+      var content = item[prueba];
+      tds += '<td>'+(content)+'</td>';
+    });
+    var $tr = $('<tr>').append(tds); 
+    $("#table_rpt tbody").append($tr);
+
+  });
+  
+  $("#table_rpt").dataTable({
+    dom: 'Bfrtip',
+    'aaSorting': [],
+    buttons: [
+        'csv'
+    ]
+  });
+}
+
+
+/*
 function createTable(data) {
 
   columns = [];
@@ -205,22 +235,31 @@ function createTable(data) {
   });
   thead += '</tr></thead>';
 
-
   $("#resultado_rpt").append('<table class="table table-bordered" id="table_rpt">'+thead+'<tbody></tbody></table>');
   
   $.each(data, function(i, item) {
 
     var tds = '';
+
     $.each(rows, function(i, prueba) {
+
         if ((i +1) == rows.length) {
           var content = item[prueba];
         }else{
           var content = item['_id'][prueba];
         }
+
+        console.log("SIN ID: "+item[prueba]);
+        console.log(item['_id'][prueba]);
+
       tds += '<td>'+(content)+'</td>';
+
     });
+
+
     var $tr = $('<tr>').append(tds); 
     $("#table_rpt tbody").append($tr)
+
   });
   
   $("#table_rpt").dataTable({
@@ -229,5 +268,5 @@ function createTable(data) {
         'csv'
     ]
   });
-}
+}*/
 

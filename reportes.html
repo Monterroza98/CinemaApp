@@ -20,18 +20,12 @@
                 <div class="panel-body">
                     <div class="col-sm-3">
                         <label>Reporte</label>
-                        <select class="form-control" id="list_rpt" name="list_rpt" onchange="ctrlData(this.value)">
+                        <select class="form-control" id="list_rpt" name="list_rpt" onchange="ctrlFiltros(this.value)">
                             <option value="0" hidden>Seleccione</option>
-                            <option value="TopPeople">Películas por ingreso de personas</option>
-                            <option value="TopMoney">Películas por ingreso monetario</option>
-                            <option value="TopMovie">Top películas</option>
-                            <option value="TopSucursal">Top sucursales</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-2">
-                        <label>Datos</label>
-                        <select class="form-control" id="list_data" name="list_data" onchange="ctrlFiltros(this.value)">
-                            <option value="0" hidden>Seleccione</option>
+                            <option value="1">Top de películas</option>
+                            <option value="2">Top de paises</option>
+                            <option value="3">Top cadena</option>
+                            <option value="4">Información de película</option>
                         </select>
                     </div>
                     <div class="col-sm-2" id="div_rango">
@@ -47,11 +41,11 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <br>
                         <button type="button" class="btn btn-primary" id="btnConsultar" onclick="consultarReporte()">Consultar</button>
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <br>
                         <button type="button" class="btn btn-default" id="btnLimpiar">Limpiar</button>
                     </div>
@@ -73,7 +67,7 @@
                                 <option value="CR">CR</option>
                             </select>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" id="div_cadena">
                             <label>Cadena</label>
                             <select class="form-control" id="list_cadena" name="list_cadena">
                                 <option value="" hidden>Seleccione</option>
