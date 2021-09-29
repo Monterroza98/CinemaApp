@@ -19,7 +19,7 @@ def upload_file():
     f = request.files.getlist('file')
     for file in f:
         processFiles(file)
-    return redirect("http://localhost")
+    return redirect("http://localhost/reportes.html")
 
 
 def processFiles(file):
@@ -36,15 +36,17 @@ def processFiles(file):
     filename = filename[len(filename)-1].split(".")
     filename = filename[0]
     fecha = filename[2:]
+    pais = filename[:2]
     # Convertimos el dataframe a json
     fileToJSON = j.to_json(orient="records")
     # Convertimos el JSON a objeto de Python
     content = js.loads(fileToJSON)
-    newJSON = {"_id": filename, "fecha": fecha, "content": content}
+    newJSON = {"_id": filename, "fecha": fecha, "pais": pais, "content": content}
     # Convertimos el objeto python a JSON
     result = js.dumps(newJSON)
     # Insertamos el objeto a Mongo (col es coleccion)
     x = MongoConnection.insertOne(js.loads(result))
+    #print(js.loads(result))
     print(x.inserted_id)
     return
 
@@ -217,9 +219,9 @@ def TopPeopleWeekendContryRangeDateAll():
 
 
 # Regional All :)
-@app.route('/TopPeopleWeekendContryDateAll', methods=['POST'])
-@cross_origin()
-def TopPeopleWeekendContryRangeDateAll():
+#@app.route('/TopPeopleWeekendContryDateAll', methods=['POST'])
+#@cross_origin()
+#def TopPeopleWeekendContryRangeDateAll():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     range = int(paramDic['range'])
