@@ -66,6 +66,7 @@ def TopMoviesByCountryAndDate():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     range = int(paramDic['range'])
+    sort = int(paramDic['sort'])
     dateIni = paramDic['dateIni']
     dateIni = dateIni.split("-")
     yi = int(dateIni[0])
@@ -135,7 +136,7 @@ def TopMoviesByCountryAndDate():
             }
         }, {
             '$sort': {
-                'Ingreso total': -1
+                'Ingreso total': sort
             }
         }, {
             '$limit': range
@@ -156,6 +157,7 @@ def TopMoviesByCountry():
     paramDic = js.loads(parameters)
     country = paramDic['country']
     range = int(paramDic['range'])
+    sort = int(paramDic['sort'])
     result = [
         {
             '$match': {
@@ -199,7 +201,7 @@ def TopMoviesByCountry():
             }
         }, {
             '$sort': {
-                'Ingreso Total': -1
+                'Ingreso Total': sort
             }
         }, {
             '$limit': range
@@ -220,6 +222,7 @@ def TopMovies():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     range = int(paramDic['range'])
+    sort = int(paramDic['sort'])
     result = [
         {
             '$project': {
@@ -258,7 +261,7 @@ def TopMovies():
             }
         }, {
             '$sort': {
-                'Ingreso Total': -1
+                'Ingreso Total': sort
             }
         }, {
             '$limit': range
@@ -279,6 +282,7 @@ def TopMoviesByDate():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     range = int(paramDic['range'])
+    sort = int(paramDic['sort'])
     dateIni = paramDic['dateIni']
     dateIni = dateIni.split("-")
     yi = int(dateIni[0])
@@ -342,7 +346,7 @@ def TopMoviesByDate():
             }
         }, {
             '$sort': {
-                'Ingreso Total': -1
+                'Ingreso Total': sort
             }
         }, {
             '$limit': range
@@ -628,6 +632,7 @@ def MovieByCountryCircuitAndTheater():
     country = paramDic['country']
     circuit = int(paramDic['circuit'])
     theater = int(paramDic['theater'])
+    movie = int(paramDic['movie'])
     dateIni = paramDic['dateIni']
     dateIni = dateIni.split("-")
     yi = int(dateIni[0])
@@ -649,7 +654,7 @@ def MovieByCountryCircuitAndTheater():
             '$match': {
                 '$and': [
                     {
-                        'content.titulo': 'Aquaman'
+                        'content.titulo': movie
                     }, {
                         '_id': re.compile(country)
                     }, {
@@ -782,3 +787,200 @@ def GetTheaters():
     response = js.dumps(response)
     return response
 
+# TopCountries
+
+
+@app.route('/TopCountries', methods=['POST'])
+@cross_origin()
+def TopCountries():
+
+    result = [
+        {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'pais': '$pais'
+                },
+                'Ingreso  total': {
+                    '$sum': '$content.ingTotal'
+                },
+                'Ingreso de personas': {
+                    '$sum': '$content.admTotal'
+                },
+                'Ingreso de personas por fin de semanas': {
+                    '$sum': '$content.ingWeekend'
+                },
+                'Ingreso por fin de semanas': {
+                    '$sum': '$content.admWeekend'
+                }
+            }
+        }
+    ]
+
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+# TopCountriesByDate
+
+
+@app.route('/TopCountriesByDate', methods=['POST'])
+@cross_origin()
+def TopCountriesByDate():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
+
+    result = [
+        {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        }, {
+            '$match': {
+                '$and': [
+                    {
+                        'date': {
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lt': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }
+                ]
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'pais': '$pais'
+                },
+                'Ingreso  total': {
+                    '$sum': '$content.ingTotal'
+                },
+                'Ingreso de personas': {
+                    '$sum': '$content.admTotal'
+                },
+                'Ingreso de personas por fin de semanas': {
+                    '$sum': '$content.ingWeekend'
+                },
+                'Ingreso por fin de semanas': {
+                    '$sum': '$content.admWeekend'
+                }
+            }
+        }
+    ]
+
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+
+# CircuitByCountry
+@app.route('/CircuitByCountry', methods=['POST'])
+@cross_origin()
+def CircuitByCountry():
+    parameters = request.get_json()
+    paramDic = js.loads(parameters)
+    circuit = paramDic['circuit']
+   
+    dateIni = paramDic['dateIni']
+    dateIni = dateIni.split("-")
+    yi = int(dateIni[0])
+    mi = int(dateIni[1])
+    di = int(dateIni[2])
+
+    dateFin = paramDic['dateFin']
+    dateFin = dateFin.split("-")
+    yf = int(dateFin[0])
+    mf = int(dateFin[1])
+    df = int(dateFin[2])
+
+    result = [
+	{
+    	'$unwind': {
+        	'path': '$content'
+    	}
+	}, {
+    	'$project': {
+        	'_id': True,
+        	'content': True,
+        	'fecha': True,
+        	'pais': True,
+        	'date': {
+            	'$dateFromString': {
+                	'dateString': '$fecha',
+                	'format': '%Y-%m-%d'
+            	}
+        	}
+    	}
+	}, {
+    	'$match': {
+        	'$and': [
+            	{
+                	'date': {
+                    	'$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                	}
+            	}, {
+                	'date': {
+                    	'$lt': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
+                	}
+            	}
+        	]
+    	}
+	}, {
+    	'$match': {
+        	'content.cadena': circuit
+    	}
+	}, {
+    	'$group': {
+        	'_id': {
+            	'pais': '$pais'
+        	},
+        	'Ingreso  total': {
+            	'$sum': '$content.ingTotal'
+        	},
+        	'Ingreso de personas': {
+            	'$sum': '$content.admTotal'
+        	},
+        	'Ingreso de personas por fin de semanas': {
+            	'$sum': '$content.ingWeekend'
+        	},
+        	'Ingreso por fin de semanas': {
+            	'$sum': '$content.admWeekend'
+        	}
+    	}
+	}
+]
+
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
