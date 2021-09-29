@@ -51,12 +51,6 @@ def processFiles(file):
     print(x.inserted_id)
     return
 
-# ----------------------------------------------Controllers------------------------------------------------------------
-
-# --------------------------------topPeople-----------------------------------------------------------------------
-
-# ---------------Weekend----------------------------------
-
 
 # TopMoviesByCountryAndDate
 @app.route('/TopMoviesByCountryAndDate', methods=['POST'])
@@ -121,7 +115,7 @@ def TopMoviesByCountryAndDate():
                     'ID Titulo': '$content.idTitulo',
                     'Titulo': '$content.titulo'
                 },
-                "Ingreso  total": {
+                "Ingreso total": {
                     '$sum': "$content.ingTotal"
                 },
                 "Admision total de personas": {
@@ -148,8 +142,6 @@ def TopMoviesByCountryAndDate():
     return response
 
 # TopMoviesByCountry
-
-
 @app.route('/TopMoviesByCountry', methods=['POST'])
 @cross_origin()
 def TopMoviesByCountry():
@@ -186,7 +178,7 @@ def TopMoviesByCountry():
                     'ID Titulo': '$content.idTitulo',
                     'Titulo': '$content.titulo'
                 },
-                "Ingreso  total": {
+                "Ingreso total": {
                     '$sum': "$content.ingTotal"
                 },
                 "Admision total de personas": {
@@ -201,7 +193,7 @@ def TopMoviesByCountry():
             }
         }, {
             '$sort': {
-                'Ingreso Total': sort
+                'Ingreso total': sort
             }
         }, {
             '$limit': range
@@ -214,8 +206,6 @@ def TopMoviesByCountry():
     return response
 
 # TopMovies
-
-
 @app.route('/TopMovies', methods=['POST'])
 @cross_origin()
 def TopMovies():
@@ -246,7 +236,7 @@ def TopMovies():
                     'ID Titulo': '$content.idTitulo',
                     'Titulo': '$content.titulo'
                 },
-                "Ingreso  total": {
+                "Ingreso total": {
                     '$sum': "$content.ingTotal"
                 },
                 "Admision total de personas": {
@@ -261,7 +251,7 @@ def TopMovies():
             }
         }, {
             '$sort': {
-                'Ingreso Total': sort
+                'Ingreso total': sort
             }
         }, {
             '$limit': range
@@ -274,8 +264,6 @@ def TopMovies():
     return response
 
 # TopMoviesByDate
-
-
 @app.route('/TopMoviesByDate', methods=['POST'])
 @cross_origin()
 def TopMoviesByDate():
@@ -331,7 +319,7 @@ def TopMoviesByDate():
                     'ID Titulo': '$content.idTitulo',
                     'Titulo': '$content.titulo'
                 },
-                "Ingreso  total": {
+                "Ingreso total": {
                     '$sum': "$content.ingTotal"
                 },
                 "Admision total de personas": {
@@ -346,7 +334,7 @@ def TopMoviesByDate():
             }
         }, {
             '$sort': {
-                'Ingreso Total': sort
+                'Ingreso total': sort
             }
         }, {
             '$limit': range
@@ -358,9 +346,9 @@ def TopMoviesByDate():
     response = js.dumps(response)
     return response
 
+#-----------------------------------------------------------------------------------------
+
 # MovieByDate
-
-
 @app.route('/MovieByDate', methods=['POST'])
 @cross_origin()
 def MovieByDate():
@@ -441,8 +429,6 @@ def MovieByDate():
     return response
 
 # MoviesByDateAndCountry
-
-
 @app.route('/MoviesByDateAndCountry', methods=['POST'])
 @cross_origin()
 def MoviesByDateAndCountry():
@@ -622,8 +608,6 @@ def MovieByCountryAndCircuit():
     return response
 
 # MovieByCountryCircuitAndTheater
-
-
 @app.route('/MovieByCountryCircuitAndTheater', methods=['POST'])
 @cross_origin()
 def MovieByCountryCircuitAndTheater():
@@ -718,9 +702,9 @@ def MovieByCountryCircuitAndTheater():
     response = js.dumps(response)
     return response
 
+#----------------------------------------------------------
+
 # GetMovies
-
-
 @app.route('/GetMovies', methods=['POST'])
 @cross_origin()
 def GetMovies():
@@ -742,8 +726,6 @@ def GetMovies():
     return response
 
 # GetCircuits
-
-
 @app.route('/GetCircuits', methods=['POST'])
 @cross_origin()
 def GetCircuits():
@@ -765,8 +747,6 @@ def GetCircuits():
     return response
 
 # GetTheaters
-
-
 @app.route('/GetTheaters', methods=['POST'])
 @cross_origin()
 def GetTheaters():
@@ -787,9 +767,9 @@ def GetTheaters():
     response = js.dumps(response)
     return response
 
+#-------------------------------------------------------------------------
+
 # TopCountries
-
-
 @app.route('/TopCountries', methods=['POST'])
 @cross_origin()
 def TopCountries():
@@ -802,7 +782,7 @@ def TopCountries():
         }, {
             '$group': {
                 '_id': {
-                    'pais': '$pais'
+                    'Pais': '$pais'
                 },
                 'Ingreso  total': {
                     '$sum': '$content.ingTotal'
@@ -826,8 +806,6 @@ def TopCountries():
     return response
 
 # TopCountriesByDate
-
-
 @app.route('/TopCountriesByDate', methods=['POST'])
 @cross_origin()
 def TopCountriesByDate():
@@ -855,6 +833,7 @@ def TopCountriesByDate():
                 '_id': True,
                 'content': True,
                 'fecha': True,
+                'pais': True,
                 'date': {
                     '$dateFromString': {
                         'dateString': '$fecha',
@@ -871,7 +850,7 @@ def TopCountriesByDate():
                         }
                     }, {
                         'date': {
-                            '$lt': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
+                            '$lte': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
                         }
                     }
                 ]
@@ -879,7 +858,7 @@ def TopCountriesByDate():
         }, {
             '$group': {
                 '_id': {
-                    'pais': '$pais'
+                    'Pais': '$pais'
                 },
                 'Ingreso  total': {
                     '$sum': '$content.ingTotal'
@@ -902,6 +881,7 @@ def TopCountriesByDate():
     response = js.dumps(response)
     return response
 
+#------------------------------------------------------------------------------
 
 # CircuitByCountry
 @app.route('/CircuitByCountry', methods=['POST'])
@@ -924,61 +904,61 @@ def CircuitByCountry():
     df = int(dateFin[2])
 
     result = [
-	{
-    	'$unwind': {
-        	'path': '$content'
-    	}
-	}, {
-    	'$project': {
-        	'_id': True,
-        	'content': True,
-        	'fecha': True,
-        	'pais': True,
-        	'date': {
-            	'$dateFromString': {
-                	'dateString': '$fecha',
-                	'format': '%Y-%m-%d'
-            	}
-        	}
-    	}
-	}, {
-    	'$match': {
-        	'$and': [
-            	{
-                	'date': {
-                    	'$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
-                	}
-            	}, {
-                	'date': {
-                    	'$lt': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
-                	}
-            	}
-        	]
-    	}
-	}, {
-    	'$match': {
-        	'content.cadena': circuit
-    	}
-	}, {
-    	'$group': {
-        	'_id': {
-            	'pais': '$pais'
-        	},
-        	'Ingreso  total': {
-            	'$sum': '$content.ingTotal'
-        	},
-        	'Ingreso de personas': {
-            	'$sum': '$content.admTotal'
-        	},
-        	'Ingreso de personas por fin de semanas': {
-            	'$sum': '$content.ingWeekend'
-        	},
-        	'Ingreso por fin de semanas': {
-            	'$sum': '$content.admWeekend'
-        	}
-    	}
-	}
-]
+        {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$project': {
+                '_id': True,
+                'content': True,
+                'fecha': True,
+                'pais': True,
+                'date': {
+                    '$dateFromString': {
+                        'dateString': '$fecha',
+                        'format': '%Y-%m-%d'
+                    }
+                }
+            }
+        }, {
+            '$match': {
+                '$and': [
+                    {
+                        'date': {
+                            '$gt': datetime(yi, mi, di, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }, {
+                        'date': {
+                            '$lt': datetime(yf, mf, df, 0, 0, 0, tzinfo=timezone.utc)
+                        }
+                    }
+                ]
+            }
+        }, {
+            '$match': {
+                'content.cadena': circuit
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'pais': '$pais'
+                },
+                'Ingreso  total': {
+                    '$sum': '$content.ingTotal'
+                },
+                'Ingreso de personas': {
+                    '$sum': '$content.admTotal'
+                },
+                'Ingreso de personas por fin de semanas': {
+                    '$sum': '$content.ingWeekend'
+                },
+                'Ingreso por fin de semanas': {
+                    '$sum': '$content.admWeekend'
+                }
+            }
+        }
+    ]
 
     response = MongoConnection.aggregate(result)
     response = list(response)

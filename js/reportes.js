@@ -1,8 +1,10 @@
 $(document).ready(function () {
   $( "#div_filtros" ).hide(); 
   $( "#div_chkFecha" ).hide();  
-  $( "#div_rango" ).hide();  //
+  $( "#div_chkSort" ).hide(); 
+  $( "#div_rango" ).hide();
   $( "#div_cadena" ).hide();
+  $( "#div_pais" ).hide();
 });
 
 $( function() {
@@ -43,13 +45,22 @@ $('#btnLimpiar').click(function () {
 });
 
 function ctrlFiltros(data) {
-  if(data == "1" || data == "2"){
+  if(data == "1"){
     $( "#div_filtros" ).show(); 
     $( "#div_chkFecha" ).show();
+    $( "#div_chkSort" ).show(); 
     $( "#div_rango" ).show();
+  }else if(data == "2"){
+    $( "#div_filtros" ).show(); 
+    $( "#div_chkFecha" ).show();
+    $( "#div_chkSort" ).hide();
+    $( "#div_rango" ).hide();
+    $( "#div_pais" ).hide();
   }else{
+    $( "#div_pais" ).hide();
     $( "#div_filtros" ).hide(); 
     $( "#div_chkFecha" ).hide();
+    $( "#div_chkSort" ).hide(); 
     $( "#div_rango" ).hide();
     $( "#div_cadena" ).hide();
   }
@@ -75,6 +86,13 @@ function consultarReporte() {
   var rango  = $("#rango").val();
 
   if(!rango){rango = 10;}
+
+  if ($('#chkSort').prop('checked')) {
+    var sort = 1;
+  }else{
+    var sort = -1;
+  }
+
   if ($('#chkFecha').prop('checked')) {
     var sinFecha = true;
   }else{
@@ -83,39 +101,24 @@ function consultarReporte() {
     }
   }
 
-  /* 
-  query = "topWkndCountryAndRange";
-  params = '{"country": "'+pais+'", "range": "10", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
-
-    if(pais){
-        if(cadena){
-          (sinFecha ? '':'')
-        }else{
-          (sinFecha ? '':'')
-        }
-      }else{
-        (sinFecha ? '':'')
-      }
-  */
-
   switch (reporte) {
     case "1": //TopMovie
 
       if(pais){
         if(sinFecha){
           query = "TopMoviesByCountry";
-          params = '{"country": "'+pais+'", "range": "'+rango+'"}';
+          params = '{"country": "'+pais+'", "range": "'+rango+'", "sort": "'+sort+'"}';
         }else{
           query = "TopMoviesByCountryAndDate";
-          params = '{"country": "'+pais+'", "range": "'+rango+'", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
+          params = '{"country": "'+pais+'", "range": "'+rango+'", "dateIni": "'+inicio+'",  "dateFin": "'+final+'", "sort": "'+sort+'"}';
         }
       }else{
         if(sinFecha){
           query = "TopMovies";
-          params = '{"range": "'+rango+'"}';
+          params = '{"range": "'+rango+'", "sort": "'+sort+'"}';
         }else{
           query = "TopMoviesByDate";
-          params = '{"range": "'+rango+'", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
+          params = '{"range": "'+rango+'", "dateIni": "'+inicio+'",  "dateFin": "'+final+'", "sort": "'+sort+'"}';
         }
       }
       
@@ -123,13 +126,11 @@ function consultarReporte() {
 
     case "2": //TopCountry
         if(sinFecha){
-          //TopCountrybyCountry
-          query = "";
-          params = '{"country": "'+pais+'", "range": "'+rango+'"}';
+          query = "TopCountries";
+          params = '{}';
         }else{
-          //TopCountrybyCountryAndDate
-          query = "";
-          params = '{"country": "'+pais+'", "range": "'+rango+'", "dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
+          query = "TopCountriesByDate";
+          params = '{"dateIni": "'+inicio+'",  "dateFin": "'+final+'"}';
         }
         break;
 
@@ -152,7 +153,6 @@ function consultarReporte() {
       error: function (jqXHR, textStatus, errorThrown) { alert("Error") },
       success: function (data) {
         createTable(data);
-        console.log(data)
       }
   });
 
@@ -209,64 +209,3 @@ function createTable(data) {
     ]
   });
 }
-
-
-/*
-function createTable(data) {
-
-  columns = [];
-  rows = [];
-  Object.keys(data[0]).forEach(function(key) {
-    columns.unshift(key);
-    rows.unshift(key);
-  });
-  rows.pop();
-  
-  Object.keys(data[0]['_id']).forEach(function(key) {
-    columns.unshift(key);
-    rows.unshift(key);
-  });
-
-  columns.pop();
-
-  var thead = '<thead><tr>';
-  $.each(columns, function(i, item) {
-    thead += '<th>'+item+'</th>';
-  });
-  thead += '</tr></thead>';
-
-  $("#resultado_rpt").append('<table class="table table-bordered" id="table_rpt">'+thead+'<tbody></tbody></table>');
-  
-  $.each(data, function(i, item) {
-
-    var tds = '';
-
-    $.each(rows, function(i, prueba) {
-
-        if ((i +1) == rows.length) {
-          var content = item[prueba];
-        }else{
-          var content = item['_id'][prueba];
-        }
-
-        console.log("SIN ID: "+item[prueba]);
-        console.log(item['_id'][prueba]);
-
-      tds += '<td>'+(content)+'</td>';
-
-    });
-
-
-    var $tr = $('<tr>').append(tds); 
-    $("#table_rpt tbody").append($tr)
-
-  });
-  
-  $("#table_rpt").dataTable({
-    dom: 'Bfrtip',
-    buttons: [
-        'csv'
-    ]
-  });
-}*/
-
