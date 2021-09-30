@@ -363,6 +363,7 @@ def MovieByDate():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     dateIni = paramDic['dateIni']
+    movie = paramDic['movie']
     dateIni = dateIni.split("-")
     yi = int(dateIni[0])
     mi = int(dateIni[1])
@@ -381,7 +382,7 @@ def MovieByDate():
             }
         }, {
             '$match': {
-                'content.titulo': 'Aquaman'
+                'content.titulo': movie
             }
         }, {
             '$project': {
@@ -445,6 +446,7 @@ def MoviesByDateAndCountry():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     country = paramDic['country']
+    movie = paramDic['movie']
     dateIni = paramDic['dateIni']
     dateIni = dateIni.split("-")
     yi = int(dateIni[0])
@@ -466,7 +468,7 @@ def MoviesByDateAndCountry():
             '$match': {
                 '$and': [
                     {
-                        'content.titulo': 'Aquaman'
+                        'content.titulo': movie
                     }, {
                         '_id': re.compile(country)
                     }
@@ -533,7 +535,8 @@ def MovieByCountryAndCircuit():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     country = paramDic['country']
-    circuit = int(paramDic['circuit'])
+    movie = paramDic['movie']
+    circuit = paramDic['circuit']
     dateIni = paramDic['dateIni']
     dateIni = dateIni.split("-")
     yi = int(dateIni[0])
@@ -555,7 +558,7 @@ def MovieByCountryAndCircuit():
             '$match': {
                 '$and': [
                     {
-                        'content.titulo': 'Aquaman'
+                        'content.titulo': movie
                     }, {
                         '_id': re.compile(country)
                     }, {
@@ -742,9 +745,9 @@ def GetMovies():
 # GetCircuits
 
 
-@app.route('/GetCircuits', methods=['POST'])
+@app.route('/GetCircuitsByCountry', methods=['POST'])
 @cross_origin()
-def GetCircuits():
+def GetCircuitsByCountry():
     parameters = request.get_json()
     paramDic = js.loads(parameters)
     country = paramDic['country']
@@ -754,6 +757,27 @@ def GetCircuits():
                 '_id': re.compile(country)
             }
         }, {
+            '$unwind': {
+                'path': '$content'
+            }
+        }, {
+            '$group': {
+                '_id': '$content.cadena'
+            }
+        }
+    ]
+
+    response = MongoConnection.aggregate(result)
+    response = list(response)
+    response = js.dumps(response)
+    return response
+
+
+@app.route('/GetCircuits', methods=['POST'])
+@cross_origin()
+def GetCircuits():
+    result = [
+        {
             '$unwind': {
                 'path': '$content'
             }
