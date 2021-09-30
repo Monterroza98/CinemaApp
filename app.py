@@ -19,7 +19,7 @@ def upload_file():
     f = request.files.getlist('file')
     for file in f:
         processFiles(file)
-    return redirect("http://localhost/reportes.html")
+    return redirect("http://localhost/CinemaApp/reportes.html")
 
 
 def processFiles(file):

@@ -24,7 +24,7 @@
                     <form method="POST" enctype="multipart/form-data" id="formFile"
                         action="http://127.0.0.1:5000/upload" onsubmit="$('#loading').show();$('#uploader').hide()">
                         <div class="panel-body">
-                            <input id="file" name="file" type="file" multiple data-show-preview="false"
+                            <input id="file" name="file" type="file" multiple data-show-preview="false" class="file"
                                 data-show-upload="false" webkitdirectory>
                         </div>
                         <div class="panel-footer">
@@ -36,6 +36,10 @@
         </div>
         <div id="loading" style="display: none;">
             <img src="Resources/loadingGIF.gif"/>
+        </div>
+        <div class="col-sm-12">
+            <br>
+            <button type="button" class="btn btn-primary btn-block" onclick="window.location.href='http://localhost/CinemaApp/Reportes.html'">Reportes</button>
         </div>
     </div>
 </body>
